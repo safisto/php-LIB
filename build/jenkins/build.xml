@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project name="de.safisto.lib" basedir=".">
+
+	<!-- 
+	 ! Common settings
+	 !-->
+	<property file="build.${user.name}.properties" />
+	<property file="build.properties" />
+	<property file="${common.dir}/common.properties" />
+	
+	<!-- 
+	 ! Common imports
+	 !-->
+	<import file="${common.dir}/common.xml" />
+	
+</project>
