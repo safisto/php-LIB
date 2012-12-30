@@ -11,18 +11,18 @@
   <fileSets>
     <fileSet>
       <directory>${basedir}/src</directory>
-      <outputDirectory>/</outputDirectory>
+      <outputDirectory>/LIB</outputDirectory>
     </fileSet>
   </fileSets>
   <files>
     <file>
       <source>${basedir}/build/RELEASE</source>
-      <outputDirectory>/</outputDirectory>
+      <outputDirectory>/LIB</outputDirectory>
       <filtered>true</filtered>
     </file>
     <file>
       <source>${basedir}/build/Version.php</source>
-      <outputDirectory>/</outputDirectory>
+      <outputDirectory>/LIB</outputDirectory>
       <filtered>true</filtered>
     </file>
   </files>
