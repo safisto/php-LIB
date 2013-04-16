@@ -47,7 +47,7 @@ class HttpRequestHandler
 	{
 		$classname = NULL;
 
-		$parts = split( '/', $this->request->getPath() );
+		$parts = explode( '/', $this->request->getPath() );
 		foreach( $parts as $part )
 		{
 			if( strlen( $part ) > 0 )
@@ -114,7 +114,7 @@ class Request
 			$uri = $_SERVER['REQUEST_URI'];
 		}
 
-		if( ereg( '(.*/)([^/]*)', $uri, $regs ) )
+		if( preg_match( '#(.*\/)([^/]*)#', $uri, $regs ) )
 		{
 			$this->path = $regs[1];
 			$this->filename = $regs[2];

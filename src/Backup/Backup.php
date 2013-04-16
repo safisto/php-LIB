@@ -22,7 +22,7 @@ class Backup
 
     private function resolveDomain()
     {
-	ereg( '\.([^\.]*)\.[^\.]*$', getenv( 'HTTP_HOST' ), $args );
+	preg_match( '#\.([^\.]*)\.[^\.]*$#', getenv( 'HTTP_HOST' ), $args );
 	return $args[1];
     }
 
@@ -36,7 +36,7 @@ class Backup
 
     private function backupMySQL()
     {
-	foreach( split( ' ', $this->MYSQL_DATABASES ) as $database )
+	foreach( explode( ' ', $this->MYSQL_DATABASES ) as $database )
 	{
 	    $this->println( 'MySQL backup: ' . $database );
 
@@ -99,7 +99,7 @@ class Backup
 	}
 
 	$this->println( 'Backup of ' . $this->domain . ' complete.' );
-	
+
 	echo '</pre>';
 	ob_end_flush();
     }

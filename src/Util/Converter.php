@@ -4,7 +4,7 @@ include_once( 'LIB/Util/Validator.php' );
 
 class Converter
 {
-	
+
 	public static function convertInt( $value )
 	{
 		if( Validator::isInt( $value) )
@@ -13,7 +13,7 @@ class Converter
 		}
 		return NULL;
 	}
-	
+
 	public static function convertString( $value )
 	{
         if( !trim( $value ) )
@@ -34,7 +34,7 @@ class Converter
         }
         else
         {
-            return ereg_replace( '\'', '\\\'', $value );
+            return preg_replace( '#\'#', '\\\'', $value );
         }
     }
 
@@ -46,10 +46,10 @@ class Converter
         }
         else
         {
-            return ereg_replace( '"', '\"', $value );
+            return preg_replace( '#"#', '\"', $value );
         }
     }
-	
+
     public static function decodeSingleQuotes( $value )
     {
         if( is_null( $value ) )
@@ -58,7 +58,7 @@ class Converter
         }
         else
         {
-            return ereg_replace( '\\\\\'', '\'', $value );
+            return preg_replace( '#\\\\\'#', '\'', $value );
         }
     }
 
@@ -70,7 +70,7 @@ class Converter
         }
         else
         {
-            return ereg_replace( '\"', '"', $value );
+            return preg_replace( '#\"#', '"', $value );
         }
     }
 

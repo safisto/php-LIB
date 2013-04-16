@@ -20,26 +20,26 @@ class Authbasic
 {
 	private $passfile;
 	private $groupfile;
-	
+
 	private $passwd;
 	private $groups;
 
 	private $usernameRule = AUTHBASIC_CHAR_RULE_UpperAndLowerCaseLetters;
 	private $passwordRule = AUTHBASIC_CHAR_RULE_UpperAndLowerCaseLetters;
-	
+
 	private $usernameMinLen = 5;
 	private $passwordMinLen = 5;
-	
+
 	function Authbasic( $passfile = '.htpasswd', $groupfile = NULL )
 	{
 		Authbasic::__construct( $passfile, $groupfile );
 	}
-	
+
 	function __construct( $passfile = '.htpasswd', $groupfile = NULL )
 	{
 		$this->passfile = $passfile;
 		$this->groupfile = $groupfile;
-		
+
 		$this->passwd = &File_Passwd::factory( 'Authbasic' );
 		$this->passwd->setFile( $passfile );
 		$this->passwd->load();
@@ -49,27 +49,27 @@ class Authbasic
 			$this->loadGroups();
 		}
 	}
-	
+
 	public function setUsernameRule( $rule )
 	{
 		$this->usernameRule = $rule;
 	}
-	
+
 	public function setPasswordRule( $rule )
 	{
 		$this->passwordRule = $rule;
 	}
-	
+
 	public function setUsernameMinLen( $len )
 	{
 		$this->usernameMinLen = $len;
 	}
-	
+
 	public function setPasswordMinLen( $len )
 	{
 		$this->passwordMinLen = $len;
 	}
-	
+
 	private function loadGroups()
 	{
 		if ( !$fp = @fopen( $this->groupfile, 'r' ) )
@@ -84,7 +84,7 @@ class Authbasic
 		fclose( $fp );
 
 		$this->groups = array();
-		foreach( split( "\n", $content ) as $line )
+		foreach( explode( "\n", $content ) as $line )
 		{
 			$data = explode( ':', $line );
 			if( count( $data ) < 2 )
@@ -96,7 +96,7 @@ class Authbasic
 			}
 		}
 	}
-	
+
 	private function saveGroups()
 	{
 		$content = '';
@@ -107,7 +107,7 @@ class Authbasic
 				$content .= $group . ':' . implode( ' ', $users ) . "\n";
 			}
 		}
-		
+
 		if ( !$fp = @fopen( $this->groupfile, 'w' ) )
 		{
 			throw new Exception( 'Couldn\'t open \'' . $groupfile . '!' );
@@ -122,31 +122,31 @@ class Authbasic
 		{
 			$err = 'Couldn\'t lock \'' . $groupfile . '!';
 		}
-		fclose($fp);		
-		
+		fclose($fp);
+
 		if( !is_null( $err ) )
 		{
-			throw new Exception( $err );		
+			throw new Exception( $err );
 		}
 	}
-	
+
 	private function verifyCharRule( $value, $rule, $len )
 	{
 		if ($len < 1 || strlen ($value) < $len) return false;
 		if ( !$rule ) return true;
-		
+
 		switch( $rule )
 		{
 			case AUTHBASIC_CHAR_RULE_UpperAndLowerCaseLetters :
-				if (!ereg ("^[A-Za-z]+$", $value) || !ereg ("[A-Z]+", $value) || !ereg ("[a-z]+", $value)) return false;
+				if (!preg_match ("#^[A-Za-z]+$#", $value) || !preg_match ("#[A-Z]+#", $value) || !preg_match ("#[a-z]+#", $value)) return false;
 				break;
 
 			case AUTHBASIC_CHAR_RULE_LettersAndNumbers :
-				if (!ereg ("^[A-Za-z0-9]+$", $value) || !ereg ("[A-Za-z]+", $value) || !ereg ("[0-9]+", $value)) return false;
+				if (!preg_match ("#^[A-Za-z0-9]+$#", $value) || !preg_match ("#[A-Za-z]+#", $value) || !preg_match ("#[0-9]+#", $value)) return false;
 				break;
 
 			case AUTHBASIC_CHAR_RULE_ContainsNonAlphanumericCharacters :
-				if (!ereg ("[<>\.,;_+*#@|!\"'§$%&/=?]", $value)) return false;
+				if (!preg_match ("#[<>\.,;_+*\#@|!\"'ï¿½$%&/=?]#", $value)) return false;
 				break;
 
 			case AUTHBASIC_CHAR_RULE_UpperAndLowerCaseLettersOrLettersAndNumbers :
@@ -154,7 +154,7 @@ class Authbasic
 				break;
 
 			case AUTHBASIC_CHAR_RULE_MixedUpperAndLowerCaseLettersAndNumbers :
-				if (!ereg ("^[A-Za-z0-9]+$", $value) || !ereg ("[A-Z]+", $value) || !ereg ("[a-z]+", $value) || !ereg ("[0-9]+", $value)) return false;
+				if (!preg_match ("#^[A-Za-z0-9]+$#", $value) || !preg_match ("#[A-Z]+#", $value) || !preg_match ("#[a-z]+#", $value) || !preg_match ("#[0-9]+#", $value)) return false;
 				break;
 
 			case AUTHBASIC_CHAR_RULE_UpperAndLowerCaseLettersOrLettersAndNumbersAndContainsNonAlphanumericCharacters :
@@ -183,7 +183,7 @@ class Authbasic
 			$this->addUserToGroup( $user, $group );
 		}
 	}
-	
+
 	public function addUserToGroup( $user, $group )
 	{
 		if( !$this->passwd->userExists( $user ) )
@@ -208,7 +208,7 @@ class Authbasic
 		}
 		return true;
 	}
-	
+
 	public function delUserFromGroups( $user, $groups )
 	{
 		if( !is_array( $groups ) )
@@ -228,7 +228,7 @@ class Authbasic
 			$this->delUserFromGroup( $user, $group );
 		}
 	}
-	
+
 	public function delUserFromGroup( $user, $group )
 	{
 		if ( is_null( $this->groupfile ) )
@@ -245,7 +245,7 @@ class Authbasic
 		}
 		return true;
 	}
-	
+
 	public function addUser( $user, $password, $groups = NULL )
 	{
 		if( !$this->verifyUsername( $user ) )
@@ -262,7 +262,7 @@ class Authbasic
 		}
 
 		$this->passwd->addUser( $user, $password );
-		
+
 		if( !is_null( $groups ) )
 		{
 			foreach( $groups as $group )
@@ -272,22 +272,22 @@ class Authbasic
 		}
 		return true;
 	}
-	
+
 	public function verifyUsername( $user )
 	{
 		return $this->verifyCharRule( $user, $this->usernameRule, $this->usernameMinLen );
 	}
-	
+
 	public function verifyPassword( $password )
 	{
 		return $this->verifyCharRule( $password, $this->passwordRule, $this->passwordMinLen );
 	}
-	
+
 	public function userExists( $user )
 	{
 		return $this->passwd->userExists( $user );
 	}
-	
+
 	public function setEncryptedPassword( $user, $password )
 	{
 		if( !$this->passwd->userExists( $user ) )
@@ -296,12 +296,12 @@ class Authbasic
 		}
 		$this->passwd->_users[$user] = $password;
 	}
-	
+
 	public function getEncryptedPassword( $password )
 	{
 		return $this->passwd->_genPass( $password );
 	}
-	
+
 	public function delUser( $user )
 	{
 		if( !is_null( $this->groupfile ) )
@@ -311,7 +311,7 @@ class Authbasic
 		$this->passwd->delUser( $user );
 		return true;
 	}
-	
+
 	public function changePasswd( $user, $password )
 	{
 		if ( !$this->verifyPassword( $password ) )
@@ -321,7 +321,7 @@ class Authbasic
 		$this->passwd->changePasswd( $user, $password );
 		return true;
 	}
-	
+
 	public function save()
 	{
 		if( !is_null( $this->groupfile ) )
@@ -331,7 +331,7 @@ class Authbasic
 		$this->passwd->save();
 		return true;
 	}
-	
+
 }
 
 ?>

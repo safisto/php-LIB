@@ -7,7 +7,7 @@ class Menu
 	private $link2role = array();
 	private $selectedItem = NULL;
 	private $uri;
-	
+
     public function addMenuItem( $menuItem, $rootMenuItem = NULL )
     {
         if( is_null( $rootMenuItem ) )
@@ -23,9 +23,9 @@ class Menu
         if( !is_null( $menuItem->link ) )
         {
             $link = $menuItem->link;
-            if( ereg( '^/', $link ) )
+            if( preg_match( '#^/#', $link ) )
             {
-                if( ereg( '/$', $link ) )
+                if( preg_match( '#/$#', $link ) )
                 {
                     $link .= 'index.php';
                 }
@@ -66,7 +66,7 @@ class Menu
 			{
 				$item->setSelected( true );
 			}
-			
+
 			$this->selectedItem = NULL;
 			foreach( $this->menuItems as $item )
 			{
@@ -78,14 +78,14 @@ class Menu
 			}
 		}
 	}
-	
+
 	public function getRequiredUserRole()
 	{
 		if( isset( $this->link2role[$this->uri] ) )
 		{
 			return $this->link2role[$this->uri];
 		}
-		return NULL;		
+		return NULL;
 	}
 
 	public function filterByUserRoles( $roles )
@@ -94,11 +94,11 @@ class Menu
 		{
 			$roles = array();
 		}
-		
+
 		for( $i = 0; $i < count( $this->menuItems ); $i++ )
 		{
 			$role = $this->menuItems[$i]->getUserRole();
-			
+
 			$this->menuItems[$i]->filterByUserRoles( $roles );
 
 			if( !is_null( $role ) && !in_array( $role, $roles ) )
@@ -109,7 +109,7 @@ class Menu
 			}
 		}
 	}
-	
+
 	public function getItems( $usergroups = NULL )
 	{
 		return $this->menuItems;
@@ -119,7 +119,7 @@ class Menu
 	{
 		return $this->selectedItem;
 	}
-	
+
 	public function hasSelectedItem()
 	{
 		return !is_null( $this->selectedItem );
@@ -132,13 +132,13 @@ class MenuItem
     public $title;
 	public $link;
     public $target;
-    
+
 	private $userrole;
 	private $root;
     private $items = array();
 	private $selected = false;
 	private $properties = array();
-	
+
 	function MenuItem( $title, $userrole, $link, $target = NULL )
 	{
 		$this->title = $title;
@@ -164,17 +164,17 @@ class MenuItem
             $this->items[] = $menuItem;
         }
     }
-	
+
     public function addProperty( $key, $value )
     {
     	$this->properties[$key] = $value;
     }
-    
+
     public function getProperty( $key )
     {
     	return ( array_key_exists( $key, $this->properties ) ? $this->properties[$key] : null );
     }
-    
+
 	public function getUserRole()
 	{
 		return $this->userrole;
@@ -189,7 +189,7 @@ class MenuItem
 	{
 		return $this->items;
 	}
-	
+
 	public function hasItems()
 	{
 		return count( $this->items );
@@ -199,7 +199,7 @@ class MenuItem
 	{
 		$this->selected = (boolean)$selected;
 	}
-	
+
 	public function isSelected()
 	{
 		return $this->selected;
@@ -216,7 +216,7 @@ class MenuItem
 		}
 		return null;
 	}
-	
+
 	public function hasSelectedItem()
 	{
 		foreach( $this->items as $item )
@@ -235,7 +235,7 @@ class MenuItem
 		{
 			$roles = array();
 		}
-		
+
 		for( $i = 0; $i < count( $this->items ); $i++ )
 		{
 			$role = $this->items[$i]->getUserRole();
@@ -248,7 +248,7 @@ class MenuItem
 			$this->items[$i]->filterByUserRoles( $roles );
 		}
 	}
-	
+
 }
 
 ?>
