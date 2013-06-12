@@ -3,7 +3,7 @@
 	
 	<groupId>de.safisto</groupId>
 	<artifactId>lib</artifactId>
-	<version>1.0.3</version>
+	<version>1.0.4</version>
 	<packaging>jar</packaging>
 
 	<name>Common PHP Library</name>

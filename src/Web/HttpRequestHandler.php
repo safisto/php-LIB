@@ -68,7 +68,7 @@ class HttpRequestHandler
 	protected function getController( $classname )
 	{
 		$file = CONTROLLER_FOLDER . '/' . $classname . '.php';
-		if( !@include_once( $file ) )
+		if( !include_once( $file ) )
 		{
 			return NULL;
 		}
