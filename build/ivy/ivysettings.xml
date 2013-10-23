@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ivysettings>
+
+	<properties file="${ivy.settings.dir}/ivysettings.properties" />
+
+	<credentials host="${nexus.host}" realm="Sonatype Nexus Repository Manager" username="${nexus.user}" passwd="${nexus.password}" />
+
+	<settings defaultResolver="default" circularDependencyStrategy="error" />
+	<resolvers>
+	
+		<filesystem name="local">
+			<ivy pattern="${ivy.local.dir}/${ivy.local.pattern}" />
+			<artifact pattern="${ivy.local.dir}/${ivy.local.artifact.pattern}" />
+		</filesystem>
+		
+		<url name="shared" m2compatible="true" checksums="">
+			<artifact pattern="${nexus.url}/${nexus.artifact.pattern}" />
+			<ivy pattern="${nexus.url}/${nexus.ivy.pattern}" />
+		</url>
+
+	    <ibiblio name="nexus" m2compatible="true" root="${nexus-public.url}" />
+	    <ibiblio name="nexus-releases" m2compatible="true" root="${nexus-releases.url}" />
+	    <ibiblio name="nexus-snapshots" m2compatible="true" root="${nexus-snapshots.url}" checkmodified="true" changingPattern="*-SNAPSHOT" />
+		
+		<chain name="default" returnFirst="true">
+			<resolver ref="local" />
+			<resolver ref="shared" />
+			<resolver ref="nexus" />
+		</chain>
+	</resolvers>
+
+</ivysettings>

@@ -1,3 +1,0 @@
-Project: ${project.name}
-Version: ${project.version} build ${buildNumber}
-Date:    ${buildDate}

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ivy-module version="2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ant.apache.org/ivy/schemas/ivy.xsd">
+
+	<info organisation="${project.org}" module="${project.name}" revision="${project.version}" />
+
+	<configurations>
+		<conf name="default" />
+		<conf name="build" />
+	</configurations>
+
+	<publications defaultconf="default">
+		<artifact name="${project.name}" ext="zip" type="zip" />
+	</publications>
+
+	<dependencies>
+		<dependency org="de.tuksworld" name="tuksworld-build" rev="latest.release" changing="true" conf="build->build_webapp" />
+	</dependencies>
+
+</ivy-module>
