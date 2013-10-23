@@ -20,7 +20,7 @@
 
 	<ivy:settings file="${ivy.settings.dir}/ivysettings.xml" />
 
-	<import file="${lib.build}/common_build_webapp.xml" optional="true" />
+	<import file="${lib.build}/common_build_php.xml" optional="true" />
 
 	<!-- 
 	##################################################################################

@@ -13,7 +13,7 @@
 	</publications>
 
 	<dependencies>
-		<dependency org="de.tuksworld" name="tuksworld-build" rev="latest.release" changing="true" conf="build->build_webapp" />
+		<dependency org="de.tuksworld" name="tuksworld-build" rev="latest.release" changing="true" conf="build->build_php" />
 	</dependencies>
 
 </ivy-module>
