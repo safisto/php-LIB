@@ -13,18 +13,22 @@
 			<artifact pattern="${ivy.local.dir}/${ivy.local.artifact.pattern}" />
 		</filesystem>
 		
-		<url name="shared" m2compatible="true" checksums="">
-			<artifact pattern="${nexus.url}/${nexus.artifact.pattern}" />
-			<ivy pattern="${nexus.url}/${nexus.ivy.pattern}" />
+		<url name="shared.release" m2compatible="true" checksums="">
+			<artifact pattern="${nexus.release.url}/${nexus.artifact.pattern}" />
+			<ivy pattern="${nexus.release.url}/${nexus.ivy.pattern}" />
 		</url>
 
-	    <ibiblio name="nexus" m2compatible="true" root="${nexus-public.url}" />
-	    <ibiblio name="nexus-releases" m2compatible="true" root="${nexus-releases.url}" />
-	    <ibiblio name="nexus-snapshots" m2compatible="true" root="${nexus-snapshots.url}" checkmodified="true" changingPattern="*-SNAPSHOT" />
+		<url name="shared.milestone" m2compatible="true" checksums="">
+			<artifact pattern="${nexus.milestone.url}/${nexus.artifact.pattern}" />
+			<ivy pattern="${nexus.milestone.url}/${nexus.ivy.pattern}" />
+		</url>
+
+	    <ibiblio name="nexus" m2compatible="true" root="${nexus.public.url}" />
 		
-		<chain name="default" returnFirst="true">
+		<chain name="default">
 			<resolver ref="local" />
-			<resolver ref="shared" />
+			<resolver ref="shared.release" />
+			<resolver ref="shared.milestone" />
 			<resolver ref="nexus" />
 		</chain>
 	</resolvers>
