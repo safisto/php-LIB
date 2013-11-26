@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ivysettings>
 
-	<properties file="${ivy.settings.dir}/ivysettings.properties" />
+	<properties file="ivysettings.properties" />
 
 	<credentials host="${nexus.host}" realm="Sonatype Nexus Repository Manager" username="${nexus.user}" passwd="${nexus.password}" />
 
