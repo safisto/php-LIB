@@ -1,7 +1,5 @@
 <?php
 
-include_once( 'LIB/Db/DataSource.php' );
-
 class DataSourceFactory
 {
 	
@@ -13,7 +11,7 @@ class DataSourceFactory
 	{
 		if( !isset( $xml->dsn ) )
 		{
-			return NULL;
+			return null;
 		}
 		
 		$dsn = (string)$xml->dsn;
@@ -24,7 +22,7 @@ class DataSourceFactory
 			foreach( $xml->option  as $option )
 			{
 				$attribs = $option->attributes();
-
+		
 				if( isset( $attribs->key ) )
 				{
 					$key = (string) $attribs->key;
@@ -34,7 +32,7 @@ class DataSourceFactory
 					$msg = 'Attribute "key" has not been set for the database "option" element.';
 					throw new Exception( $msg );
 				}
-				
+		
 				if( isset( $attribs->value ) )
 				{
 					$value = (string) $attribs->value;
@@ -44,11 +42,28 @@ class DataSourceFactory
 					$msg = 'Attribute "value" has not been set for the database "option" element.';
 					throw new Exception( $msg );
 				}
-
+		
 				$options[$key] = $value;
 			}
 		}
-		return new DataSource( $dsn, $charset, $options );
+		
+		$dsType = isset( $xml['type'] ) ? strtolower( $xml['type'] ) : 'pdo';
+		
+		if( $dsType == 'mdb2' )
+		{
+			include_once( 'LIB/Db/Mdb2DataSource.php' );
+			$ds = new Mdb2DataScource( $dsn, $charset, $options );
+		}
+		else
+		{
+			$username = isset( $xml->username ) ? (string)$xml->username : null;
+			$password = isset( $xml->password ) ? (string)$xml->password : null;
+
+			include_once( 'LIB/Db/PdoDataSource.php' );
+			$ds = new PdoDataScource( $dsn, $username, $password, $charset, $options );
+		}
+		
+		return $ds;
 	}
 	
 }

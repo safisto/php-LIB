@@ -1,18 +1,18 @@
 <?php
 
-final class DataSource
+class DataSource
 {
-	private $dsn;
-	private $charset;
-	private $options;
+	protected $dsn;
+	protected $charset;
+	protected $options;
 	
-	function DataSource( $dsn, $charset, $options = array() )
+	function __construct( $dsn, $charset, $options = array() )
 	{
 		$this->dsn = $dsn;
 		$this->charset = $charset;
 		$this->options = $options;
 	}
-
+	
 	public final function getDsn()
 	{
 		return $this->dsn;
@@ -22,7 +22,7 @@ final class DataSource
 	{
 		return $this->charset;
 	}
-
+	
 	public final function getOptions()
 	{
 		return $this->options;

@@ -40,12 +40,31 @@ class ModuleService
 		return $this->connection;
 	}
 
+	private function getPdoConnection()
+	{
+		if( is_null( $this->connection ) )
+		{
+			$charset = $this->dataSource->getCharset();
+			if( !is_null( $charset ) )
+			{
+				$options = array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES ' . $charset);
+			}
+			else
+			{
+				$options = array();
+			}
+			
+			$this->connection = new PDO( $this->dataSource->getDsn(), $this->dataSource->getUsername(), $this->dataSource->getPassword(), $options );
+		}
+		return $this->connection;
+	}
+
 	public function destroy()
 	{
 		$this->modules = NULL;
 		
 		// make sure the database connection is closed
-		if( !is_null( $this->connection ) )
+		if( !is_null( $this->connection ) && !$this->connection instanceof PDO )
 		{
 			$this->connection->disconnect();
 		}
@@ -109,6 +128,10 @@ class ModuleService
 		if( $module instanceof Mdb2Module )
 		{
 			return $module->$moduleFunction( $this->getMdb2Connection(), $moduleParams );
+		}
+		elseif( $module instanceof PdoModule )
+		{
+			return $module->$moduleFunction( $this->getPdoConnection(), $moduleParams );
 		}
 		else
 		{
