@@ -1,0 +1,12 @@
+#!/bin/bash
+
+set -e
+
+echo "------ HOOK START - BUILD -------"
+printenv
+
+docker build \
+  --build-arg GIT_COMMIT="$GIT_SHA1" \
+  -t $IMAGE_NAME .
+
+echo "------ HOOK END - BUILD -------"
