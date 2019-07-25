@@ -5,7 +5,7 @@ ARG SAVANT_VERSION=3.0.1
 
 LABEL maintainer="timo.schaefer@safisto.de" \
       git.commit="${GIT_COMMIT}" \
-      description="PHP5 Apache including Safisto LIB in a Docker container"
+      description="PHP5 Apache including safisto LIB in a Docker container"
 
 ENV TIMEZONE Europe/Berlin
 
