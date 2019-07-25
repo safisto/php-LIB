@@ -74,7 +74,7 @@ RUN pear update-channels && pear upgrade-all --ignore-errors && \
 COPY src/main/docker/php.ini /usr/local/etc/php
 COPY src/main/docker/php-additional.ini /usr/local/etc/php/conf.d
 
-COPY src/main/php/* /usr/local/lib/php/LIB/
+COPY src/main/php/ /usr/local/lib/php/LIB/
 
 COPY lib/savant-$SAVANT_VERSION.zip /tmp/savant.zip
 RUN cd /tmp && \ 
