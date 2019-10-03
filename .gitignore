@@ -1,2 +1,10 @@
-bin
-target
+*~
+.gradle/
+.idea/
+.settings/
+bin/
+build/
+.buildpath
+.classpath
+.project
+*.iml

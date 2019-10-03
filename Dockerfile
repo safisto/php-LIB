@@ -1,11 +1,7 @@
-FROM php:5.6.31-apache
-
-ARG GIT_COMMIT
-ARG SAVANT_VERSION=3.0.1
+FROM php:7.3.10-apache
 
 LABEL maintainer="timo.schaefer@safisto.de" \
-      git.commit="${GIT_COMMIT}" \
-      description="PHP5 Apache including safisto LIB in a Docker container"
+      description="PHP7 Apache including safisto LIB"
 
 ENV TIMEZONE Europe/Berlin
 
@@ -14,27 +10,19 @@ RUN rm /bin/sh && ln -s /bin/bash /bin/sh && \
 	cp -vf /usr/share/zoneinfo/$TIMEZONE /etc/localtime && \ 
 	\
 	apt-get update && apt-get install -y \
-		telnet \
 		unzip \
-		wget \
-		curl \
 		\
 		libcurl4-gnutls-dev \
-		libfreetype6 libjpeg62-turbo libpng12-0 libfreetype6-dev libjpeg-dev libpng12-dev \
-		libmcrypt4 libmcrypt-dev \
+		libfreetype6-dev libjpeg62-turbo-dev libpng-dev \
 		libxml2-dev \	
-		zlib1g-dev \
-		\
-		php-pear \
+		libzip-dev \
 	&& \
 	cd /etc/apache2/mods-enabled && \
 	ln -s ../mods-available/rewrite.load && \
-	ln -s ../mods-available/authz_groupfile.load && \
-    \
-    echo "GIT COMMIT: $GIT_COMMIT" > /RELEASE
-		
+	ln -s ../mods-available/authz_groupfile.load
+			
 RUN docker-php-ext-configure \
-		gd --enable-gd-native-ttf --with-jpeg-dir=/usr/lib/x86_64-linux-gnu --with-png-dir=/usr/lib/x86_64-linux-gnu --with-freetype-dir=/usr/lib/x86_64-linux-gnu \
+		gd --with-jpeg-dir=/usr/lib/x86_64-linux-gnu --with-png-dir=/usr/lib/x86_64-linux-gnu --with-freetype-dir=/usr/lib/x86_64-linux-gnu \
 	&& \
 	docker-php-ext-install \
 		curl \
@@ -43,8 +31,6 @@ RUN docker-php-ext-configure \
 		iconv \
 		json \
 		mbstring \
-		mcrypt \
-		mysql \
 		mysqli \
 		opcache \
 		pdo \
@@ -55,7 +41,7 @@ RUN docker-php-ext-configure \
 	&& \
 	mkdir -p /var/www/html && \
 	echo "<?php phpinfo(); ?>" > /var/www/html/index.php
-	
+
 RUN pear update-channels && pear upgrade-all --ignore-errors && \
 	pear install Cache && \
 	pear install Cache_Lite && \
@@ -75,6 +61,8 @@ COPY src/main/docker/php.ini /usr/local/etc/php
 COPY src/main/docker/php-additional.ini /usr/local/etc/php/conf.d
 
 COPY src/main/php/ /usr/local/lib/php/LIB/
+
+ARG SAVANT_VERSION=3.0.1
 
 COPY lib/savant-$SAVANT_VERSION.zip /tmp/savant.zip
 RUN cd /tmp && \ 
